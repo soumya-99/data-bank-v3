@@ -17,6 +17,7 @@ import { COLORS, colors } from "../../Resources/colors"
 import CustomHeader from "../../Components/CustomHeader"
 import { AppStore } from "../../Context/AppContext"
 import { Button } from "react-native"
+import { createLoginTable } from "../../Database/Storage/loginStore"
 // import { useIsFocused } from '@react-navigation/native';
 const Home = ({ navigation }) => {
   const {
@@ -34,6 +35,8 @@ const Home = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
+    createLoginTable()
+
     const timer = setInterval(() => {
       setCurrentDateTime(new Date())
     }, 1000)
@@ -84,84 +87,84 @@ const Home = ({ navigation }) => {
     }, []),
   )
 
-  async function printAgentInfo() {
-    try {
-      await BluetoothEscposPrinter.printerAlign(
-        BluetoothEscposPrinter.ALIGN.CENTER,
-      )
-      await BluetoothEscposPrinter.printText(bankName, { align: "center" })
-      await BluetoothEscposPrinter.printText("\r\n", {})
-      await BluetoothEscposPrinter.printText(branchName, { align: "center" })
-      await BluetoothEscposPrinter.printText("\r\n", {})
+  // async function printAgentInfo() {
+  //   try {
+  //     await BluetoothEscposPrinter.printerAlign(
+  //       BluetoothEscposPrinter.ALIGN.CENTER,
+  //     )
+  //     await BluetoothEscposPrinter.printText(bankName, { align: "center" })
+  //     await BluetoothEscposPrinter.printText("\r\n", {})
+  //     await BluetoothEscposPrinter.printText(branchName, { align: "center" })
+  //     await BluetoothEscposPrinter.printText("\r\n", {})
 
-      await BluetoothEscposPrinter.printText("AGENT INFORMATION", {
-        align: "center",
-      })
+  //     await BluetoothEscposPrinter.printText("AGENT INFORMATION", {
+  //       align: "center",
+  //     })
 
-      await BluetoothEscposPrinter.printText("\r", {})
-      await BluetoothEscposPrinter.printText(
-        "-------------------------------",
-        {},
-      )
-      await BluetoothEscposPrinter.printText("\r\n", {})
+  //     await BluetoothEscposPrinter.printText("\r", {})
+  //     await BluetoothEscposPrinter.printText(
+  //       "-------------------------------",
+  //       {},
+  //     )
+  //     await BluetoothEscposPrinter.printText("\r\n", {})
 
-      await BluetoothEscposPrinter.printColumn(
-        [30],
-        [BluetoothEscposPrinter.ALIGN.LEFT],
-        ["Agent Name: " + agentName],
-        {},
-      )
+  //     await BluetoothEscposPrinter.printColumn(
+  //       [30],
+  //       [BluetoothEscposPrinter.ALIGN.LEFT],
+  //       ["Agent Name: " + agentName],
+  //       {},
+  //     )
 
-      await BluetoothEscposPrinter.printColumn(
-        [30],
-        [BluetoothEscposPrinter.ALIGN.LEFT],
-        ["Agent Code: " + userId],
-        {},
-      )
+  //     await BluetoothEscposPrinter.printColumn(
+  //       [30],
+  //       [BluetoothEscposPrinter.ALIGN.LEFT],
+  //       ["Agent Code: " + userId],
+  //       {},
+  //     )
 
-      await BluetoothEscposPrinter.printColumn(
-        [30],
-        [BluetoothEscposPrinter.ALIGN.LEFT],
-        ["Date: " + currentDateTime.toLocaleDateString("en-GB")],
-        {},
-      )
+  //     await BluetoothEscposPrinter.printColumn(
+  //       [30],
+  //       [BluetoothEscposPrinter.ALIGN.LEFT],
+  //       ["Date: " + currentDateTime.toLocaleDateString("en-GB")],
+  //       {},
+  //     )
 
-      await BluetoothEscposPrinter.printText("\r\n", {})
+  //     await BluetoothEscposPrinter.printText("\r\n", {})
 
-      await BluetoothEscposPrinter.printColumn(
-        [40],
-        [BluetoothEscposPrinter.ALIGN.LEFT],
-        ["Total Collection: " + totalCollection + "/-"],
-        {},
-      )
+  //     await BluetoothEscposPrinter.printColumn(
+  //       [40],
+  //       [BluetoothEscposPrinter.ALIGN.LEFT],
+  //       ["Total Collection: " + totalCollection + "/-"],
+  //       {},
+  //     )
 
-      await BluetoothEscposPrinter.printText("\r", {})
+  //     await BluetoothEscposPrinter.printText("\r", {})
 
-      await BluetoothEscposPrinter.printBarCode(
-        "My String Decode",
-        BluetoothEscposPrinter.BARCODETYPE.JAN13,
-        3,
-        120,
-        0,
-        2,
-      )
-      await BluetoothEscposPrinter.printText("\r", {})
+  //     await BluetoothEscposPrinter.printBarCode(
+  //       "My String Decode",
+  //       BluetoothEscposPrinter.BARCODETYPE.JAN13,
+  //       3,
+  //       120,
+  //       0,
+  //       2,
+  //     )
+  //     await BluetoothEscposPrinter.printText("\r", {})
 
-      // await BluetoothEscposPrinter.printQRCode("My String Decode", 280, BluetoothEscposPrinter.ERROR_CORRECTION.L)
+  //     // await BluetoothEscposPrinter.printQRCode("My String Decode", 280, BluetoothEscposPrinter.ERROR_CORRECTION.L)
 
-      // await BluetoothEscposPrinter.printText("\r\n", {})
-      await BluetoothEscposPrinter.printText(
-        "---------------X---------------",
-        {},
-      )
+  //     // await BluetoothEscposPrinter.printText("\r\n", {})
+  //     await BluetoothEscposPrinter.printText(
+  //       "---------------X---------------",
+  //       {},
+  //     )
 
-      await BluetoothEscposPrinter.printText("\r\n\r\n\r\n", {})
-      // await BluetoothEscposPrinter.printQRCode("Something", 25, 3)
-    } catch (e) {
-      // console.log(e.message || "ERROR")
-      alert("Printer is not connected. Connect it from Settings.")
-    }
-  }
+  //     await BluetoothEscposPrinter.printText("\r\n\r\n\r\n", {})
+  //     // await BluetoothEscposPrinter.printQRCode("Something", 25, 3)
+  //   } catch (e) {
+  //     // console.log(e.message || "ERROR")
+  //     alert("Printer is not connected. Connect it from Settings.")
+  //   }
+  // }
 
   return (
     <>
