@@ -8,18 +8,17 @@ import {
 } from "react-native"
 import { StackActions, useFocusEffect } from "@react-navigation/native"
 import { useState, useEffect, useContext, useCallback } from "react"
-import {
-  BluetoothEscposPrinter,
-} from "react-native-bluetooth-escpos-printer"
+import { BluetoothEscposPrinter } from "react-native-bluetooth-escpos-printer"
 
 import { Table, Rows, Row } from "react-native-table-component"
 import { COLORS, colors } from "../../Resources/colors"
 import CustomHeader from "../../Components/CustomHeader"
 import { AppStore } from "../../Context/AppContext"
 import { Button } from "react-native"
-import { createLoginTable } from "../../Database/Storage/loginStore"
+import { loginStore } from "../../Database/Storage/loginStore"
 // import { useIsFocused } from '@react-navigation/native';
 const Home = ({ navigation }) => {
+  const { createLoginTable, insertIntoLoginStore } = loginStore()
   const {
     userId,
     agentName,
@@ -36,6 +35,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     createLoginTable()
+    insertIntoLoginStore()
 
     const timer = setInterval(() => {
       setCurrentDateTime(new Date())
@@ -43,9 +43,7 @@ const Home = ({ navigation }) => {
     return () => clearInterval(timer)
   }, [])
 
-  let bank = [
-    [bankName]
-  ]
+  let bank = [[bankName]]
 
   let tableData = [
     // ["Bank", bankName],
